@@ -1,0 +1,4 @@
+direccion=localhost
+usuario=usuario
+password=1234
+archivo=taxon_tree.sql
