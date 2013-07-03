@@ -116,7 +116,7 @@
 			</div>
 		</noscript>
 		
-		<div id="content" class="span10">
+		<div id="content" class="span12">
 			<!-- content starts -->
 			
 			<div>

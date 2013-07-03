@@ -40,6 +40,9 @@
 						<tr>
 						  <th>Especie</th>
 						  <th>LSID</th>
+						  <th>Rank Taxon</th>
+						  <th>Taxon Padre</th>
+						  <th>Padre Id</th>
 						</tr>
 					</thead>
 				</table>

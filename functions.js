@@ -96,6 +96,9 @@ $("#enviaLSID").click(function (){
 						cadena = cadena + "<tr>";
 						cadena = cadena + "<td>"+ datos[i].name + "</td>";
 						cadena = cadena + "<td>"+ datos[i].lsid + "</td>";
+						cadena = cadena + "<td>"+ datos[i].rank + "</td>";
+						cadena = cadena + "<td>"+ datos[i].parent + "</td>";
+						cadena = cadena + "<td>"+ datos[i].parent_id + "</td>";
 						cadena = cadena + "</tr>";
 						
 					}

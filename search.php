@@ -22,13 +22,14 @@ if(isset($_REQUEST)){
 			$consulta = "";
 			$bd_mysql = new DB_Sql();
 			if($bd_mysql->abrirConexion()){
-				$consulta = "SELECT taxon_id, name, lsid FROM _taxon_tree ".$condicion;
+				$consulta = "SELECT taxon_id, name, rank, parent_id, lsid FROM _taxon_tree ".$condicion;
 				$result   = $bd_mysql->consulta($consulta);
 				
 				if($result && $bd_mysql->num_rows($result) > 0){
 					$datos_ar = Array();
 					while($lsids_result = $bd_mysql->fetch_array($result)){
-						$datos_ar[] = Array("name" => $lsids_result["name"],"lsid" => $lsids_result["lsid"]);
+						$parent = traerPadre($lsids_result["parent_id"], $bd_mysql);
+						$datos_ar[] = Array("name" => $lsids_result["name"],"lsid" => $lsids_result["lsid"],"rank" => $lsids_result["rank"], "parent" => $parent["name"], "parent_id" => $parent["lsid"]);
 					}
 					
 					$bd_mysql->cerrarConexion();
@@ -50,4 +51,15 @@ if(isset($_REQUEST)){
 		}
 		
 	}
+}
+
+function traerPadre($id = 0, $bd_mysql = ""){
+	$consulta = "SELECT name, lsid FROM _taxon_tree WHERE taxon_id = ".$id;
+	$result   = $bd_mysql->consulta($consulta);
+	
+	if($result && $bd_mysql->num_rows($result) > 0){
+		$lsids_result = $bd_mysql->fetch_array($result);
+		return $lsids_result;
+	}
+	
 }
