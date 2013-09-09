@@ -62,17 +62,17 @@ a {
 }
 
 a:link {
-	color: #007FC9;
+	/*color: #007FC9;*/
 	text-decoration: none;
 }
 a:visited {
-	color: #007FC9;
+	/*color: #007FC9;*/
 	text-decoration: none;
 }
 a:hover, input[type=submit]:hover  {
 	border: 0;
 	/*border-bottom:1px solid #00a0ff;*/
-	color: #00a0ff !important;
+	/*color: #00a0ff !important;*/
 	filter: alpha(opacity=60);
 	opacity: .6;
 }

@@ -31,6 +31,7 @@ class Taxontree extends CActiveRecord{
 	private $kingdom_id;
 	private $nombresTaxones;
 	private $archivoTaxones;
+	private $datosExportar;
 	
 	/**
 	 * Returns the static model of the specified AR class.
@@ -113,8 +114,8 @@ class Taxontree extends CActiveRecord{
 	public function search()
 	{
 		if ($this->nombresTaxones != '') {
-			$this->nombresTaxones=str_replace("\r","<br>",$this->nombresTaxones);
-			$lsid_ar = explode("<br>", $this->nombresTaxones);
+			$nombresTaxones=str_replace("\r","<br>",$this->nombresTaxones);
+			$lsid_ar = explode("<br>", $nombresTaxones);
 			
 			if(count($lsid_ar) > 0){
 				$criteria = new CDbCriteria;
@@ -139,6 +140,7 @@ class Taxontree extends CActiveRecord{
 					}
 					
 					$dataProvider = array();
+					$this->datosExportar = $datos_ar;
 						
 					for ($i = 0; $i < count($datos_ar); $i++) {
 						$dataProvider[$i]['id'] = $i + 1;
@@ -149,7 +151,17 @@ class Taxontree extends CActiveRecord{
 						$dataProvider[$i]['family'] = $datos_ar[$i][2]['name'];
 						$dataProvider[$i]['genus'] = $datos_ar[$i][1]['name'];
 						$dataProvider[$i]['specie'] = $datos_ar[$i][0]['name'];
-						$dataProvider[$i]['specieid'] = $datos_ar[$i][0]['lsid'];
+						
+						if($datos_ar[$i][0]['lsid'] != '-'){
+							$dataProvider[$i]['specieid'] = $datos_ar[$i][0]['lsid'];
+						}else{
+							$k = 0;
+							while($datos_ar[$i][$k]['lsid'] == '-'){
+								$k++;
+								$dataProvider[$i]['specieid'] = $datos_ar[$i][$k]['lsid'];
+								
+							}
+						}
 					}
 					//print_r($dataProvider);
 					$gridDataProvider = new CArrayDataProvider($dataProvider);
@@ -258,5 +270,13 @@ class Taxontree extends CActiveRecord{
 	public function setArchivoTaxones($value)
 	{
 		$this->archivoTaxones = $value;
+	}
+	
+	public function getDatosExportar(){
+		return $this->datosExportar;
+	}
+	
+	public function setDatosExportar($value){
+		$this->datosExportar = $value;
 	}
 }

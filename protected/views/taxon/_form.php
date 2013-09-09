@@ -3,29 +3,74 @@
 /* @var $model Taxontree */
 /* @var $form CActiveForm */
 Yii::app()->clientScript->registerCoreScript('jquery.ui');
+Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/jquery.uploadify.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/uploadify.css');
 ?>
 <script type="text/javascript">
 	var $tabs = $('.tabbable li');
+	var dataSearch = "";
+	var dataExport;
+	var datos 		= "";
+	var datosFile	= "";
 
 	$('#prevtab').on('click', function() {
     	$tabs.filter('.active').prev('li').find('a[data-toggle="tab"]').tab('show');
 	});
 
+	$(function() {
+	    $('#Taxontree_archivoTaxones').uploadify({
+	    	'buttonText'	: 'Seleccionar Archivo',
+	    	'width'         : 140,
+	    	'fileTypeExts'  : '*.xlsx;*.xls;*.txt;*.csv',
+	    	'multi'			: false,
+	    	'swf'      		: '<?=Yii::app()->theme->baseUrl;?>/scripts/uploadify.swf',
+	        'uploader' 		: '<?=Yii::app()->theme->baseUrl;?>/scripts/uploadify.php',
+			'onUploadComplete' : function(file){
+				$.post("readFile", {archivo: file.name, tipo: file.type},function(data){
+					$("#Taxontree_datosExportar").val(data);
+					$.fn.yiiGridView.update('taxones-grid', {data: {Taxontree: {nombresTaxones : data}}});
+				});
+			}
+	    });
+	});
+
 	function buscarTaxones(id,modal,grid){
-		var datos = $.trim($("#Taxontree_nombresTaxones").val());
-		if(datos != ""){
+		datos 		= $.trim($("#Taxontree_nombresTaxones").val());
+		datosFile 	= $.trim($("#Taxontree_archivoTaxones").val());
+
+		if(datosFile != ""){
+			if(window.FormData){
+				return false;
+			}
+		}else if(datos != ""){
+			$("#Taxontree_datosExportar").val(datos);
 			$.fn.yiiGridView.update(grid, {data: $('#'+id).serialize()});
 		}else{
 			return false;
-			}
+		}
+	}
+
+	function exportarTabla(){
+		$('#taxon-form-data').submit();
 	}
 </script>
 
+<?php /** @var BootActiveForm $form */
+$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+    'id'=>'taxon-form-data',
+    'action' => 'exportData',
+	'htmlOptions'=>array('name' => 'datos'),
+    'enableClientValidation'=>true,
+	'enableAjaxValidation'=>false,
+)); ?>
+<?php echo $form->hiddenField($model, 'datosExportar'); ?>
+<?php $this->endWidget();?>
 
 <?php /** @var BootActiveForm $form */
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'taxon-form',
     'type'=>'horizontal',
+	'htmlOptions'=>array('enctype'=>'multipart/form-data','name' => 'prueba'),
     'enableClientValidation'=>true,
 	'enableAjaxValidation'=>false,
 )); ?>
@@ -73,7 +118,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 							'url' => '#',
 							'icon'=>'icon-plus',
 							'htmlOptions' => array(
-								'onclick'=>'{formularioNuevoContacto()}',
+								'onclick'=>'{exportarTabla()}',
 								'data-toggle' => 'modal',
 								'data-target' => '#exportarTaxonesModal',
 							),
@@ -85,9 +130,6 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 
 <?php 
-$gridDataProvider = new CArrayDataProvider(array(
-		array('id'=>'-', 'kingdom'=>'-', 'phylum'=>'-', 'class'=>'-', 'order'=>'-', 'family' => '-', 'genus' => '-', 'specie' => '-', 'specieid' => '-'),
-));
 echo $this->renderPartial('_taxones_lista', array('listTaxones' => $gridDataProvider)); 
 ?>
 <?php $this->endWidget();?>

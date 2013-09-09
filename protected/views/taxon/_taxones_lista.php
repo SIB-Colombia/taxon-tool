@@ -12,6 +12,6 @@
 		array( 'name'=>'family', 'header'=> 'Family'),
 		array( 'name'=>'genus', 'header'=> 'Genus'),
     	array( 'name'=>'specie', 'header'=> 'Specie'),
-    	array( 'name'=>'specieid', 'header'=> 'Specie ID'),
+    	array( 'name'=>'specieid', 'header'=> 'LSID'),
 	),
 )); ?>
