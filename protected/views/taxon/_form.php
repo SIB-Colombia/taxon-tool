@@ -27,6 +27,8 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/uploa
 	        'uploader' 		: '<?=Yii::app()->theme->baseUrl;?>/scripts/uploadify.php',
 			'onUploadComplete' : function(file){
 				$.post("readFile", {archivo: file.name, tipo: file.type},function(data){
+					
+				
 					$("#Taxontree_datosExportar").val(data);
 					$.fn.yiiGridView.update('taxones-grid', {data: {Taxontree: {nombresTaxones : data}}});
 				});

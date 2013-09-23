@@ -12,7 +12,7 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/speci
 <?php 
 if (!isset($gridDataProvider)) {
 	$gridDataProvider = new CArrayDataProvider(array(
-			array('id'=>'-', 'kingdom'=>'-', 'phylum'=>'-', 'class'=>'-', 'order'=>'-', 'family' => '-', 'genus' => '-', 'specie' => '-', 'specieid' => '-'),
+			array('id'=>'-', 'name'=>'-', 'kingdom'=>'-', 'phylum'=>'-', 'class'=>'-', 'order'=>'-', 'family' => '-', 'genus' => '-', 'epitetoes' => '-', 'epitetoin' => '-', 'rank' => '-','author' => '-', 'specie' => '-', 'specieid' => '-'),
 	));
 }
 echo $this->renderPartial('_form', array('model'=>$model, 'gridDataProvider' => $gridDataProvider)); ?>
