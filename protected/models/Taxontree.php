@@ -107,8 +107,8 @@ class Taxontree extends CActiveRecord{
 				'phylum_id'	=> 'Phylum ID',
 				'kingdom'	=> 'Kingdom',
 				'Kingdom_id'	=> 'Kingdom ID',
-				'nombresTaxones' => 'Nombres Científicos',
-				'archivoTaxones' => 'Archivo de Nombres'
+				'nombresTaxones' => Yii::t('app', 'Ingrese hasta 5000 nombres'),
+				'archivoTaxones' => Yii::t('app', 'Archivo de Nombres')
 		);
 	}
 	
@@ -131,15 +131,16 @@ class Taxontree extends CActiveRecord{
 				
 				for ($i = 0; $i < count($lsid_ar); $i++) {
 					if($i == 0){
-						$condicion = "t.name LIKE '".trim($lsid_ar[$i])."'";
+						$condicion = "`t`.name LIKE '".trim($lsid_ar[$i])."'";
 					}else{
-						$condicion .= " OR t.name LIKE '".trim($lsid_ar[$i])."'";
+						$condicion .= " OR `t`.name LIKE '".trim($lsid_ar[$i])."'";
 					}
 				}
-				$cond = "SELECT t.name FROM _taxon_tree t WHERE ".$condicion;
+				//$cond = "SELECT t.name FROM _taxon_tree t WHERE ".$condicion;
 				
 				$criteria->with = array('taxon_detail', 'taxon_detail.author_string');
-				$criteria->addCondition('`t`.`name` IN ('.$cond.')');
+				//$criteria->addCondition('`t`.`name` IN ('.$cond.')');
+				$criteria->addCondition($condicion);
 				$criteria->order = "name ASC";
 				
 				$lsids_result = $this->findAll($criteria);

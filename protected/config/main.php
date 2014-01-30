@@ -11,7 +11,7 @@ Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'Sistema de Búsqueda Taxonómica',
+	'name'=>'Servicio De Resolución Taxonómica Y De LSIDs',
 	'charset'=>'utf-8',	// Valentina: Esta linea es para evitar problemas con tilde y � en t�tulos de p�ginas
 	
 	// Bootstrap configuration
@@ -21,7 +21,7 @@ return array(
 	'preload'=>array('log','bootstrap'),
 		
 	'language'=>'es', // Este es el lenguaje predeterminado de la aplicaci�n
-	'sourceLanguage'=>'en', //  Lenguaje predeterminado de los archivos
+	'sourceLanguage'=>'es', //  Lenguaje predeterminado de los archivos
 
 	// autoloading model and component classes
 	'import'=>array(
@@ -77,8 +77,8 @@ return array(
 			//'username' => 'lgrajales',
 			//'password' => 'Lg2013-',
 			//'emulatePrepare' => true,
-			'username' => 'charisma', //actualizar usuario
-			'password' => '12345', //actualizar password
+			'username' => 'xxx', //actualizar usuario
+			'password' => 'xxxx', //actualizar password
 			'charset' => 'utf8',
 			'emulatePrepare' => false,
 			'enableProfiling'=>true,

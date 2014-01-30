@@ -76,7 +76,7 @@ text-transform:uppercase;
 
 #panes a{  display:inline-block; vertical-align:top; }
 
-#panes p{ font-size:0.9em; color:#fff;}
+#panes p{ font-size:0.9em; color:#999999; text-align: justify;}
 
 #panes h3, #panes div h4 {
 

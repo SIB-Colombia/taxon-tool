@@ -29,7 +29,7 @@ class SiteController extends Controller
 	{
 	// Cargar el modelo formulario de registro para autenticar al aplicante basada en m�todo Natalia
 		// A futuro reemplazar por autenticacion RBAC
-		$model=new LoginForm;
+		//$model=new LoginForm;
 		 
 		// Verificar si el usuario previamente estaba autenticado
 		/*if(Yii::app()->user->getId() === null)
@@ -39,6 +39,7 @@ class SiteController extends Controller
 		} else {
 			$this->redirect(array("catalogo/index"));
 		}*/
+		
 		
 		$this->redirect(array("taxon/busqueda"));
 	}
@@ -116,5 +117,25 @@ class SiteController extends Controller
 	{
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
+	}
+	
+	public function cleanFileTmp(){
+		
+		$dirPath	= "tmp/";
+		$directorio = opendir($dirPath);
+		
+		while ($archivo = readdir($directorio)){
+			
+			if (is_file($archivo)) {
+				$op_file = pathinfo($dirPath.$archivo);
+				if($op_file['extension'] == 'txt'){
+					$filetime = time() - filemtime($dirPath.$archivo);
+					if($filetime <= (60*60*24)){
+						unlink($dirPath.$archivo);
+					}
+				}
+			}
+		}
+		closedir($directorio);
 	}
 }
