@@ -55,7 +55,26 @@ return array(
 		'Taxón'	=> 'Taxon',
 		'Taxonomía'	=> 'Taxonomy',
 		'Español'	=> 'Spanish',
-		'Ingles'	=> 'English'
-		
+		'Ingles'	=> 'English',
+		'Taxón ID'	=> 'Taxon ID',
+		'Identificador'	=> 'Indentifier',
+		'Dataset ID'	=> 'Dataset ID',
+		'Dataset Nombre' => 'Dataset Name',
+		'Nombre Aceptado ID'	=> 'Accepted Name Usage ID',
+		'Nombre del Padre Usado ID'	=> 'Parent Name Usage ID',
+		'Estado Taxonomico'	=> 'Taxonimic Status',
+		'Rango Taxon'	=> 'Taxon Rank',
+		'Rango Taxon Textualmente'	=> 'Verbatim Taxon Rank',
+		'Super Familia'	=> 'Super Family',
+		'Nombre Genérico'	=> 'Generic Name',
+		'Subgénero'	=> 'Subgenus',
+		'Fuente'	=> 'Source',
+		'Nombre publicado en'	=> 'Name published in',
+		'Nombre acorde a'	=> 'Name According To',
+		'Modificado'	=> 'Modified',
+		'Descripción'	=> 'Description',
+		'Taxon Concept ID'	=> 'Taxon Concept ID',
+		'Nombre Científico ID'	=> 'Scientific Name ID',
+		'Referencias'	=> 'References'
 );
 ?>

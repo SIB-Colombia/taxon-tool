@@ -1,20 +1,38 @@
 <?php
 /**
- * This is the model class for table "_taxon_tree".
+ * This is the model class for table "tax_darwinrecord".
  *
- * The followings are the available columns in table '_taxon_tree':
- * @property integer $taxon_id
- * @property string $name
- * @property string $rank
- * @property integer $parent_id
- * @property string $lsid
- * @property integer $number_of_children
- * @property integer $total_species_estimation
- * @property integer $total_species
- * @property string estimate_source
- * @property string string
- * The followings are the available model relations:
- * @property Taxon_Detail[] $taxon_detail
+ * The followings are the available columns in table 'tax_darwinrecord':
+ * @property integer $taxonID
+ * @property string $identifier
+ * @property string $datasetID
+ * @property string $datasetName
+ * @property string $acceptedNameUsageID
+ * @property string $parentNameUsageID
+ * @property string $taxonomicStatus
+ * @property string $taxonRank
+ * @property string $verbatimTaxonRank
+ * @property string $scientificName
+ * @property string $kingdom
+ * @property string $phylum
+ * @property string $class
+ * @property string $tax_order
+ * @property string $superfamily
+ * @property string $family
+ * @property string $genericName
+ * @property string $genus
+ * @property string $subgenus
+ * @property string $specificEpithet
+ * @property string $infraspecificEpithet
+ * @property string $scientificNameAuthorship
+ * @property string $tax_source
+ * @property string $namePublishedln
+ * @property string $nameAccordingTo
+ * @property string $modified
+ * @property string $description
+ * @property string $taxonConceptID
+ * @property string $scientificNameID
+ * @property string $tax_references
  * 
  */
 
@@ -52,7 +70,7 @@ class Taxontree extends CActiveRecord{
 	 */
 	public function tableName()
 	{
-		return '_taxon_tree';
+		return 'tax_darwinrecord';
 	}
 	
 	/**
@@ -63,13 +81,13 @@ class Taxontree extends CActiveRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-				array('name, rank, lsid', 'required'),
-				array('taxon_id, parent_id, number_of_children, total_species_estimation, total_species', 'numerical', 'integerOnly'=>true),
-				array('name, rank, lsid', 'length', 'max'=>255),
+				//array('name, rank, lsid', 'required'),
+				//array('taxon_id, parent_id, number_of_children, total_species_estimation, total_species', 'numerical', 'integerOnly'=>true),
+				//array('name, rank, lsid', 'length', 'max'=>255),
 				array('archivoTaxones','file','maxSize' => 20000,'types' => 'txt'),
 				// The following rule is used by search().
 				// Please remove those attributes that should not be searched.
-				array('taxon_id, name, rank, parent_id, lsid, string', 'safe', 'on'=>'search')
+				//array('taxon_id, name, rank, parent_id, lsid, string', 'safe', 'on'=>'search')
 		);
 	}
 	
@@ -81,7 +99,7 @@ class Taxontree extends CActiveRecord{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'taxon_detail' => array(self::HAS_MANY, 'Taxon_Detail', 'taxon_id')
+			//'taxon_detail' => array(self::HAS_MANY, 'Taxon_Detail', 'taxon_id')
 			//'author_string' => array(self::HAS_ONE, 'Author_String', 'string')
 		);
 	}
@@ -92,8 +110,8 @@ class Taxontree extends CActiveRecord{
 	public function attributeLabels()
 	{
 		return array(
-				'taxon_id' => 'ID del Taxón',
-				'name'	=> 'Specie',
+				/*'taxonId' => 'ID del Taxón',
+				'identifier'	=> 'Spec',
 				'lsid'	=> 'Specie ID',
 				'genus'	=> 'Genus',
 				'genus_id'	=> 'Genus ID',
@@ -106,7 +124,8 @@ class Taxontree extends CActiveRecord{
 				'phylum'	=> 'Phylum',
 				'phylum_id'	=> 'Phylum ID',
 				'kingdom'	=> 'Kingdom',
-				'Kingdom_id'	=> 'Kingdom ID',
+				'Kingdom_id'	=> 'Kingdom ID',*/
+				'kingdom'	=> 'Kingdom',
 				'nombresTaxones' => Yii::t('app', 'Ingrese hasta 5000 nombres'),
 				'archivoTaxones' => Yii::t('app', 'Archivo de Nombres')
 		);
@@ -131,63 +150,63 @@ class Taxontree extends CActiveRecord{
 				
 				for ($i = 0; $i < count($lsid_ar); $i++) {
 					if($i == 0){
-						$condicion = "`t`.name LIKE '".trim($lsid_ar[$i])."'";
+						$condicion = "\"".trim($lsid_ar[$i])."\"";
 					}else{
-						$condicion .= " OR `t`.name LIKE '".trim($lsid_ar[$i])."'";
+						$condicion .= " \"".trim($lsid_ar[$i])."\"";
 					}
 				}
 				//$cond = "SELECT t.name FROM _taxon_tree t WHERE ".$condicion;
 				
-				$criteria->with = array('taxon_detail', 'taxon_detail.author_string');
+				//$criteria->with = array('taxon_detail', 'taxon_detail.author_string');
 				//$criteria->addCondition('`t`.`name` IN ('.$cond.')');
-				$criteria->addCondition($condicion);
-				$criteria->order = "name ASC";
-				
-				$lsids_result = $this->findAll($criteria);
+				//$criteria->select = 'kingdom';
+				//$criteria->addCondition($condicion);
+				//$criteria->order = "scientificName ASC";
+
+				$lsids_result = Yii::app()->db->createCommand()
+					->select('*')
+					->from('tax_darwinrecord')
+					->where("match (scientificName) against ('".$condicion."' IN NATURAL LANGUAGE MODE)")
+					->queryAll();
+
+				//print_r($lsids_result);	
+				//Yii::app()->end();	
+				//$lsids_result = $this->findAll($criteria);
 				
 				if(isset($lsids_result)){
-					$datos_ar = Array();
+					/*$datos_ar = Array();
 					for ($i = 0; $i < count($lsids_result); $i++) {
 						$datos = $this->init_datos();
 						$author = (isset($lsids_result[$i]['taxon_detail'][0]['author_string']['string'])) ? $lsids_result[$i]['taxon_detail'][0]['author_string']['string']: ""; 
 						$datos_ar[] = $this->getLSIDS($datos, $lsids_result[$i]->name, $lsids_result[$i]->lsid, $lsids_result[$i]->rank, $lsids_result[$i]->parent_id, $author);
-					}
+					}*/
 					
-					$datos_ar = $this->ordenarTaxon($datos_ar);
+					//$datos_ar = $this->ordenarTaxon($datos_ar);
 					$dataProvider = array();
-					$this->datosExportar = $datos_ar;
-					$keysData = array_keys($datos_ar);
-					
-					for ($i = 0; $i < count($datos_ar); $i++) {
-						$key = $keysData[$i];
-						$dataProvider[$i]['id'] 		= $i + 1;
-						$dataProvider[$i]['name']		= (isset($datos_ar[$key][9]['name'])) ? $datos_ar[$key][9]['name'] : $datos_ar[$key];
-						$dataProvider[$i]['kingdom']	= (isset($datos_ar[$key][8]['name'])) ? $datos_ar[$key][8]['name'] : "-";
-						$dataProvider[$i]['phylum']		= (isset($datos_ar[$key][7]['name'])) ? $datos_ar[$key][7]['name'] : "-";
-						$dataProvider[$i]['class']		= (isset($datos_ar[$key][6]['name'])) ? $datos_ar[$key][6]['name'] : "-";
-						$dataProvider[$i]['order']		= (isset($datos_ar[$key][5]['name'])) ? $datos_ar[$key][5]['name'] : "-";
-						$dataProvider[$i]['family']		= (isset($datos_ar[$key][4]['name'])) ? $datos_ar[$key][4]['name'] : "-";
-						$dataProvider[$i]['genus']		= (isset($datos_ar[$key][3]['name'])) ? $datos_ar[$key][3]['name'] : "-";
-						$dataProvider[$i]['epitetoes']	= (isset($datos_ar[$key][2]['name'])) ? $datos_ar[$key][2]['name'] : "-";
-						$dataProvider[$i]['epitetoin']	= (isset($datos_ar[$key][2]['lsid'])) ? $datos_ar[$key][2]['lsid'] : "-";
-						$dataProvider[$i]['rank']		= (isset($datos_ar[$key][1]['name'])) ? $datos_ar[$key][1]['name'] : "-";
-						$dataProvider[$i]['author']		= (isset($datos_ar[$key][1]['lsid'])) ? $datos_ar[$key][1]['lsid'] : "-";
-						$dataProvider[$i]['specie']		= (isset($datos_ar[$key][0]['name'])) ? $datos_ar[$key][0]['name'] : "-";
-						
-						if(isset($datos_ar[$key][0]['lsid']) && $datos_ar[$key][0]['lsid'] != '-'){
-							$dataProvider[$i]['specieid'] = $datos_ar[$key][0]['lsid'];
-						}else if(isset($datos_ar[$key][0]['lsid'])){
-							$k = 0;
-							while($datos_ar[$key][$k]['lsid'] == '-'){
-								$k++;
-								$dataProvider[$i]['specieid'] = $datos_ar[$key][$k]['lsid'];
-								
-							}
-						}else{
-							$dataProvider[$i]['specieid'] = "-";
-						}
+					$this->datosExportar = $lsids_result;
+					//$keysData = array_keys($datos_ar);
+					$i=0;
+					foreach ($lsids_result as $data){
+						//for ($i = 0; $i < count($lsids_result); $i++) {
+						//$key = $keysData[$i];
+						$dataProvider[$i]['id'] 				= $data['taxonID'];
+						//$dataProvider[$i]['name']				= (isset($lsid_ar[$i])) ? $lsid_ar[$i] : "-";
+						$dataProvider[$i]['kingdom']			= (isset($data['kingdom'])) ? $data['kingdom'] : "-";
+						$dataProvider[$i]['phylum']				= (isset($data['phylum'])) ? $data['phylum'] : "-";
+						$dataProvider[$i]['class']				= (isset($data['class']))? $data['class'] : "-";
+						$dataProvider[$i]['order']				= (isset($data['tax_order'])) ? $data['tax_order'] : "-";
+						$dataProvider[$i]['family']				= (isset($data['family'])) ? $data['family'] : "-";
+						$dataProvider[$i]['genus']				= (isset($data['genus'])) ? $data['genus'] : "-";
+						$dataProvider[$i]['epitetoes']			= (isset($data['specificEpithet'])) ? $data['specificEpithet'] : "-";
+						$dataProvider[$i]['epitetoin']			= (isset($data['infraspecificEpithet'])) ? $data['infraspecificEpithet'] : "-";
+						$dataProvider[$i]['rank']				= (isset($data['taxonRank'])) ? $data['taxonRank'] : "-";
+						$dataProvider[$i]['author']				= (isset($data['scientificNameAuthorship'])) ? $data['scientificNameAuthorship'] : "-";
+						$dataProvider[$i]['scientificName']		= (isset($data['scientificName'])) ? $data['scientificName'] : "-";
+						$dataProvider[$i]['identifier']			= (isset($data['identifier'])) ? $data['identifier'] : "-";
+						$i += 1;
 					}
-					//print_r($dataProvider);
+					
+					
 					$gridDataProvider = new CArrayDataProvider($dataProvider);
 					
 					return $gridDataProvider;

@@ -72,13 +72,13 @@ return array(
 		),*/
 		// uncomment the following to use a Postgres database
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;port=3306;dbname=col2012',
+			'connectionString' => 'mysql:host=localhost;port=3306;dbname=taxon_db',
 			//'connectionString' => 'pgsql:host=74.3.218.90;port=5432;dbname=catalogo',
 			//'username' => 'lgrajales',
 			//'password' => 'Lg2013-',
 			//'emulatePrepare' => true,
-			'username' => 'xxx', //actualizar usuario
-			'password' => 'xxxx', //actualizar password
+			'username' => 'root', //actualizar usuario
+			'password' => '', //actualizar password
 			'charset' => 'utf8',
 			'emulatePrepare' => false,
 			'enableProfiling'=>true,

@@ -5,7 +5,7 @@
     'ajaxUrl'=>array('taxon/busqueda'),
 	'columns'=>array(
     	array( 'name'=>'id', 'header'=> Yii::t('app', 'Id')),
-    	array( 'name'=>'name', 'header'=> Yii::t('app', 'Nombre Ingresado')),
+    	//array( 'name'=>'name', 'header'=> Yii::t('app', 'Nombre Ingresado')),
     	array( 'name'=>'kingdom', 'header'=> Yii::t('app', 'Reino')),
 		array( 'name'=>'phylum', 'header'=> Yii::t('app', 'Filo')),
     	array( 'name'=>'class', 'header'=> Yii::t('app', 'Clase')),
@@ -16,7 +16,7 @@
     	array( 'name'=>'epitetoin', 'header'=> Yii::t('app', 'Epíteto Infraespecífico')),
     	array( 'name'=>'rank', 'header'=> Yii::t('app', 'Categoría')),
     	array( 'name'=>'author', 'header'=> Yii::t('app', 'Autor')),
-    	array( 'name'=>'specie', 'header'=> Yii::t('app', 'Nombre Científico')),
-    	array( 'name'=>'specieid', 'header'=> Yii::t('app', 'LSID')),
+    	array( 'name'=>'scientificName', 'header'=> Yii::t('app', 'Nombre Científico')),
+    	array( 'name'=>'identifier', 'header'=> Yii::t('app', 'LSID')),
 	),
 )); ?>

@@ -29,9 +29,10 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/uploa
 				$.post("readFile", {archivo: file.name, tipo: file.type},function(data){
 					
 					$("#Taxontree_datosExportar").val(data);
-					$.post("createData", {dataTaxon: data},function(data){
+					$.fn.yiiGridView.update('taxones-grid', {data: {Taxontree: {archivoData : data}}});
+					/*$.post("createData", {dataTaxon: data},function(data){
 						$.fn.yiiGridView.update('taxones-grid', {data: {Taxontree: {archivoData : data}}});
-					});
+					});*/
 					//$.fn.yiiGridView.update('taxones-grid', {data: {Taxontree: {nombresTaxones : data}}});
 				});
 			}
@@ -48,9 +49,10 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/uploa
 			}
 		}else if(datos != ""){
 			$("#Taxontree_datosExportar").val(datos);
-			$.post("createData", {dataTaxon: datos},function(data){
+			$.fn.yiiGridView.update(grid, {data: {Taxontree: {archivoData : datos}}});
+			/*$.post("createData", {dataTaxon: datos},function(data){
 				$.fn.yiiGridView.update(grid, {data: {Taxontree: {archivoData : data}}});
-			});
+			});*/
 		}else{
 			return false;
 		}
@@ -168,7 +170,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     		'headerIcon' => 'icon-th-list',
     		// when displaying a table, if we include bootstra-widget-table class
     		// the table will be 0-padding to the box
-    		'htmlOptions' => array('class'=>'bootstrap-widget-table'),
+    		'htmlOptions' => array('class'=>'bootstrap-widget-table', 'style'=>'min-width:1115px'),
     		'headerButtons' => array(
 				array(
 					'class' => 'bootstrap.widgets.TbButtonGroup',
