@@ -132,7 +132,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	  			
 	  			<h3><?php echo Yii::t('app', '¿De dónde se obtiene la información?');?></h3>
 	  			<br/>
-	  			<p><?php echo Yii::t('app', 'Por el momento, la herramienta está basada en la lista anual del año 2012 de');?> <a href="http://www.catalogueoflife.org">Catalogue of Life.</a></p>
+	  			<p><?php echo Yii::t('app', 'La información se obtiene del recurso <a href="http://www.catalogueoflife.org">"Catalogue of Life"</a> publicado en GBIF, versión 2015-02-14');?> </p>
 	  			
 	  			<h3><?php echo Yii::t('app', '¿Para qué sirve esta herramienta?');?></h3>
 	  			<br/>
@@ -148,8 +148,8 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 	  			<h3><?php echo Yii::t('app', 'Código fuente');?></h3>
 	  			<br/>
-	  			<p><?php echo Yii::t('app', 'Todo el código se encuentra disponible en repositorio de GitHub del');?> <a href="https://github.com/SIB-Colombia/taxon-tool">SiB Colombia</a></p>
-	  			
+	  			<p><?php echo Yii::t('app', 'El código fuente se encuentra disponible de libre acceso y uso  a través del repositorio de GitHub del');?> <a href="https://github.com/SIB-Colombia/taxon-tool">SiB Colombia</a></p>
+	  			<p><?php echo Yii::t('app', 'La base de datos de esta  herramienta fue creada usando el convertidor Darwin Core to SQL desarrollador por <a href="https://github.com/Canadensys/dwca2sql">Canadensys</a>');?></p>
 	  			<h3><?php echo Yii::t('app', 'Contacto');?></h3>
 	  			<br/>
 	  			<p><?php echo Yii::t('app', 'Agradecemos cualquier comentario o sugerencia al correo electrónico');?>: sib@humboldt.org.co</p>

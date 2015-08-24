@@ -137,7 +137,7 @@ class TaxonController extends Controller{
 			
 			if(count($dataArray) > 0)
 			{
-				$dataRead = implode("\r", $dataArray);
+				$dataRead = implode("\n", $dataArray);
 				unlink($nombre);
 				echo $dataRead;
 			}
@@ -165,6 +165,47 @@ class TaxonController extends Controller{
 	
 	public function actionUpdateajaxmodifyTables(){
 		
+	}
+
+	public function actionCreateSCTable(){
+
+		Yii::app()->db->createCommand("DROP TABLE IF EXISTS tax_scientificname;")->execute();
+		Yii::app()->db->createCommand("CREATE TABLE tax_scientificname (id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, scientificName varchar(500) NOT NULL, darwin_id int(11) NOT NULL);")->execute();
+		Yii::app()->db->createCommand("CREATE INDEX name ON tax_scientificname (scientificName);")->execute();
+		
+		$count 	= Yii::app()->db->createCommand()
+					->select('count(*) as total')
+					->from('tax_darwinrecord')
+					->queryAll();
+
+		//print_r($count);
+		//Yii::app()->end();
+		$finished	= false;
+		$total		= $count[0]['total'];
+		$offset		= 0;
+		$limit 		= 10000;
+		while(!$finished){
+
+			$result = Yii::app()->db->createCommand()
+				->select('taxonID,genericName,specificEpithet,infraspecificEpithet')
+				->from('tax_darwinrecord')
+				->limit($limit, $offset)
+				->queryAll();
+
+			$insert_parts	=  array();
+			foreach ($result as $key) {
+				
+				$insert_parts[]	= array('scientificName' => $key['genericName'].' '.$key['specificEpithet'].' '.$key['infraspecificEpithet'],
+										'darwin_id' => $key['taxonID']);
+				
+			}
+			
+			GeneralRepository::insertSeveral('tax_scientificname',$insert_parts);
+
+			$offset		+= 10000;
+				
+		}	
+
 	}
 	
 	public function actionExportData($datos = array()){
@@ -196,35 +237,36 @@ class TaxonController extends Controller{
 		
 		$objPhpExcel->setActiveSheetIndex(0)
 					->setCellValue('A1', 'Taxón ID')
-					->setCellValue('B1', Yii::t('app','Identificador'))
-					->setCellValue('C1',  Yii::t('app','Dataset ID'))
-					->setCellValue('D1', Yii::t('app','Dataset Nombre'))
-					->setCellValue('E1', Yii::t('app','Nombre Aceptado ID'))
-					->setCellValue('F1', Yii::t('app','Nombre del Padre Usado ID'))
-					->setCellValue('G1', Yii::t('app','Estado Taxonomico'))
-					->setCellValue('H1', Yii::t('app','Rango Taxon'))
-					->setCellValue('I1', Yii::t('app','Rango Taxon Textualmente'))
-					->setCellValue('J1', Yii::t('app','Nombre Científico'))
-					->setCellValue('K1', Yii::t('app','Reino'))
-					->setCellValue('L1', Yii::t('app','Filo'))
-					->setCellValue('M1', Yii::t('app','Clase'))
-					->setCellValue('N1', Yii::t('app','Orden'))
-					->setCellValue('O1', Yii::t('app','Super Familia'))
-					->setCellValue('P1', Yii::t('app','Familia'))
-					->setCellValue('Q1', Yii::t('app','Nombre Genérico'))
-					->setCellValue('R1', Yii::t('app','Género'))
-					->setCellValue('S1', Yii::t('app','Subgénero'))
-					->setCellValue('T1', Yii::t('app','Epíteto Específico'))
-					->setCellValue('U1', Yii::t('app','Epíteto Infraespecífico'))
-					->setCellValue('V1', Yii::t('app','Autor'))
-					->setCellValue('W1', Yii::t('app','Fuente'))
-					->setCellValue('Y1', Yii::t('app','Nombre publicado en'))
-					->setCellValue('Z1', Yii::t('app','Nombre acorde a'))
-					->setCellValue('AA1', Yii::t('app','Modificado'))
-					->setCellValue('AB1', Yii::t('app','Descripción'))
-					->setCellValue('AC1', Yii::t('app','Taxon Concept ID'))
-					->setCellValue('AD1', Yii::t('app','Nombre Científico ID'))
-					->setCellValue('AE1', Yii::t('app','Referencias'));
+					->setCellValue('B1', Yii::t('app','Nombre Ingresado'))
+					->setCellValue('C1', Yii::t('app','Identificador'))
+					->setCellValue('D1',  Yii::t('app','Dataset ID'))
+					->setCellValue('E1', Yii::t('app','Dataset Nombre'))
+					->setCellValue('F1', Yii::t('app','Nombre Aceptado ID'))
+					->setCellValue('G1', Yii::t('app','Nombre del Padre Usado ID'))
+					->setCellValue('H1', Yii::t('app','Estado Taxonomico'))
+					->setCellValue('I1', Yii::t('app','Rango Taxon'))
+					->setCellValue('J1', Yii::t('app','Rango Taxon Textualmente'))
+					->setCellValue('K1', Yii::t('app','Nombre Científico'))
+					->setCellValue('L1', Yii::t('app','Reino'))
+					->setCellValue('M1', Yii::t('app','Filo'))
+					->setCellValue('N1', Yii::t('app','Clase'))
+					->setCellValue('O1', Yii::t('app','Orden'))
+					->setCellValue('P1', Yii::t('app','Super Familia'))
+					->setCellValue('Q1', Yii::t('app','Familia'))
+					->setCellValue('R1', Yii::t('app','Nombre Genérico'))
+					->setCellValue('S1', Yii::t('app','Género'))
+					->setCellValue('T1', Yii::t('app','Subgénero'))
+					->setCellValue('U1', Yii::t('app','Epíteto Específico'))
+					->setCellValue('V1', Yii::t('app','Epíteto Infraespecífico'))
+					->setCellValue('W1', Yii::t('app','Autor'))
+					->setCellValue('Y1', Yii::t('app','Fuente'))
+					->setCellValue('Z1', Yii::t('app','Nombre publicado en'))
+					->setCellValue('AA1', Yii::t('app','Nombre acorde a'))
+					->setCellValue('AB1', Yii::t('app','Modificado'))
+					->setCellValue('AC1', Yii::t('app','Descripción'))
+					->setCellValue('AD1', Yii::t('app','Taxon Concept ID'))
+					->setCellValue('AE1', Yii::t('app','Nombre Científico ID'))
+					->setCellValue('AF1', Yii::t('app','Referencias'));
 		
 		$objPhpExcel->getActiveSheet()->setTitle(Yii::t('app','Taxonomía'));
 		
@@ -245,35 +287,36 @@ class TaxonController extends Controller{
 			foreach ($datos_ar as $data){	
 				$objPhpExcel->setActiveSheetIndex(0)
 							->setCellValue('A'.($i+2),$data['taxonID'])
-							->setCellValue('B'.($i+2), (isset($data['identifier'])) ? $data['identifier'] : "-")
-							->setCellValue('C'.($i+2), (isset($data['datasetID'])) ? $data['datasetID'] : "-")
-							->setCellValue('D'.($i+2), (isset($data['datasetName'])) ? $data['datasetName'] : "-")
-							->setCellValue('E'.($i+2), (isset($data['acceptedNameUsageID'])) ? $data['acceptedNameUsageID'] : "-")
-							->setCellValue('F'.($i+2), (isset($data['parentNameUsageID'])) ? $data['parentNameUsageID'] : "-")
-							->setCellValue('G'.($i+2), (isset($data['taxonomicStatus'])) ? $data['taxonomicStatus'] : "-")
-							->setCellValue('H'.($i+2), (isset($data['taxonRank'])) ? $data['taxonRank'] : "-")
-							->setCellValue('I'.($i+2), (isset($data['verbatimTaxonRank'])) ? $data['verbatimTaxonRank'] : "-")
-							->setCellValue('J'.($i+2), (isset($data['scientificName'])) ? $data['scientificName'] : "-")
-							->setCellValue('K'.($i+2), (isset($data['kingdom'])) ? $data['kingdom'] : "-")
-							->setCellValue('L'.($i+2), (isset($data['phylum'])) ? $data['phylum'] : "-")
-							->setCellValue('M'.($i+2), (isset($data['class'])) ? $data['class'] : "-")
-							->setCellValue('N'.($i+2), (isset($data['tax_order'])) ? $data['tax_order'] : "-")
-							->setCellValue('O'.($i+2), (isset($data['superfamily'])) ? $data['superfamily'] : "-")
-							->setCellValue('P'.($i+2), (isset($data['family'])) ? $data['family'] : "-")
-							->setCellValue('Q'.($i+2), (isset($data['genericName'])) ? $data['genericName'] : "-")
-							->setCellValue('R'.($i+2), (isset($data['genus'])) ? $data['genus'] : "-")
-							->setCellValue('S'.($i+2), (isset($data['subgenus'])) ? $data['subgenus'] : "-")
-							->setCellValue('T'.($i+2), (isset($data['specificEpithet'])) ? $data['specificEpithet'] : "-")
-							->setCellValue('U'.($i+2), (isset($data['infraspecificEpithet'])) ? $data['infraspecificEpithet'] : "-")
-							->setCellValue('V'.($i+2), (isset($data['scientificNameAuthorship'])) ? $data['scientificNameAuthorship'] : "-")
-							->setCellValue('W'.($i+2), (isset($data['tax_source'])) ? $data['tax_source'] : "-")
-							->setCellValue('Y'.($i+2), (isset($data['namePublishedln'])) ? $data['namePublishedln'] : "-")
-							->setCellValue('Z'.($i+2), (isset($data['nameAccordingTo'])) ? $data['nameAccordingTo'] : "-")
-							->setCellValue('AA'.($i+2), (isset($data['modified'])) ? $data['modified'] : "-")
-							->setCellValue('AB'.($i+2), (isset($data['description'])) ? $data['description'] : "-")
-							->setCellValue('AC'.($i+2), (isset($data['taxonConceptID'])) ? $data['taxonConceptID'] : "-")
-							->setCellValue('AD'.($i+2), (isset($data['scientificNameID'])) ? $data['scientificNameID'] : "-")
-							->setCellValue('AE'.($i+2), (isset($data['tax_references'])) ? $data['tax_references'] : "-");
+							->setCellValue('B'.($i+2), (isset($data['name'])) ? $data['name'] : "-")
+							->setCellValue('C'.($i+2), (isset($data['identifier'])) ? $data['identifier'] : "-")
+							->setCellValue('D'.($i+2), (isset($data['datasetID'])) ? $data['datasetID'] : "-")
+							->setCellValue('E'.($i+2), (isset($data['datasetName'])) ? $data['datasetName'] : "-")
+							->setCellValue('F'.($i+2), (isset($data['acceptedNameUsageID'])) ? $data['acceptedNameUsageID'] : "-")
+							->setCellValue('G'.($i+2), (isset($data['parentNameUsageID'])) ? $data['parentNameUsageID'] : "-")
+							->setCellValue('H'.($i+2), (isset($data['taxonomicStatus'])) ? $data['taxonomicStatus'] : "-")
+							->setCellValue('I'.($i+2), (isset($data['taxonRank'])) ? $data['taxonRank'] : "-")
+							->setCellValue('J'.($i+2), (isset($data['verbatimTaxonRank'])) ? $data['verbatimTaxonRank'] : "-")
+							->setCellValue('K'.($i+2), (isset($data['scientificName'])) ? $data['scientificName'] : "-")
+							->setCellValue('L'.($i+2), (isset($data['kingdom'])) ? $data['kingdom'] : "-")
+							->setCellValue('M'.($i+2), (isset($data['phylum'])) ? $data['phylum'] : "-")
+							->setCellValue('N'.($i+2), (isset($data['class'])) ? $data['class'] : "-")
+							->setCellValue('O'.($i+2), (isset($data['tax_order'])) ? $data['tax_order'] : "-")
+							->setCellValue('P'.($i+2), (isset($data['superfamily'])) ? $data['superfamily'] : "-")
+							->setCellValue('Q'.($i+2), (isset($data['family'])) ? $data['family'] : "-")
+							->setCellValue('R'.($i+2), (isset($data['genericName'])) ? $data['genericName'] : "-")
+							->setCellValue('S'.($i+2), (isset($data['genus'])) ? $data['genus'] : "-")
+							->setCellValue('T'.($i+2), (isset($data['subgenus'])) ? $data['subgenus'] : "-")
+							->setCellValue('U'.($i+2), (isset($data['specificEpithet'])) ? $data['specificEpithet'] : "-")
+							->setCellValue('V'.($i+2), (isset($data['infraspecificEpithet'])) ? $data['infraspecificEpithet'] : "-")
+							->setCellValue('W'.($i+2), (isset($data['scientificNameAuthorship'])) ? $data['scientificNameAuthorship'] : "-")
+							->setCellValue('Y'.($i+2), (isset($data['tax_source'])) ? $data['tax_source'] : "-")
+							->setCellValue('Z'.($i+2), (isset($data['namePublishedln'])) ? $data['namePublishedln'] : "-")
+							->setCellValue('AA'.($i+2), (isset($data['nameAccordingTo'])) ? $data['nameAccordingTo'] : "-")
+							->setCellValue('AB'.($i+2), (isset($data['modified'])) ? $data['modified'] : "-")
+							->setCellValue('AC'.($i+2), (isset($data['description'])) ? $data['description'] : "-")
+							->setCellValue('AD'.($i+2), (isset($data['taxonConceptID'])) ? $data['taxonConceptID'] : "-")
+							->setCellValue('AE'.($i+2), (isset($data['scientificNameID'])) ? $data['scientificNameID'] : "-")
+							->setCellValue('AF'.($i+2), (isset($data['tax_references'])) ? $data['tax_references'] : "-");
 
 				$i++;
 			}

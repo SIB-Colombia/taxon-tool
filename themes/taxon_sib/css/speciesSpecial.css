@@ -163,3 +163,6 @@ table.actionsList {
 .bootstrap-widget-content{
 	font-size: 12px !important
 }
+.grid-view table{
+	font-size: 10.5px !important;
+}

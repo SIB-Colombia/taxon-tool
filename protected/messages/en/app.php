@@ -27,12 +27,12 @@ return array(
 		'Es una herramienta asistida para la obtención de las categorías taxonómicas con su respectivo nombre, autoría y LSIDs.'	=> 'Is a tool for the computer-assisted obtention of taxonomic categories with its respective name, author and LSID.',
 		'El LSID (Life Science Identifier) es un identificador alfanumérico  global, único y persistente que es usado en la comunidad científica para referirse a un objeto.'	=> 'An LSID (Life Science Identifier) is a global, persistent, and unique alphanumeric identifier that is used in the scientific community to refer to an object.',
 		'Por ejemplo: los siguientes nombres científicos poseen un identificador en Catalogue of Life'	=> 'E.g: the following scientific names have an identifier in Catalog of Life',
-		'Por el momento, la herramienta está basada en la lista anual del año 2012 de'	=> 'Currently,  the tool is based on the 2012 Catalogue of Life  annual list',
+		'La información se obtiene del recurso <a href="http://www.catalogueoflife.org">"Catalogue of Life"</a> publicado en GBIF, versión 2015-02-14'	=> 'Information is obtained from the resource <a href="http://www.catalogueoflife.org">"Catalogue of Life"</a> published in GBIF, version 2015-02-14.',
 		'La herramienta automatiza las siguientes tareas'	=> 'The tool automates the following tasks',
 		'Obtención de los LSID, estos son usados bajo el esquema de publicación usado por el SiB Colombia como un identificador único, global y persistente del nombre a publicar'	=> 'Getting the LSIDs, these are used under the publication scheme used by the SiB Colombia as a persistent,  unique and global identifier of the name that will be published',
 		'Obtención de las categorías taxonómicas con su respectivo nombre y la autoría'	=> 'Getting taxonomic categories with their respective name and authorship',
 		'El límite de nombres que pueden someterse por búsqueda es de 5000. Si para un nombre determinado no se encuentra una coincidencia en Catalogue of Life (2012) el LSID y la taxonomía superior serán generados'	=> 'The limit of names that may be submitted by search is 5000. If  a name doesn’t match in Catalogue of Life (2012) the LSID and higher taxonomy will be not generated',
-		'Todo el código se encuentra disponible en repositorio de GitHub del'	=> 'All source code is available in our GitHub repository',
+		'El código fuente se encuentra disponible de libre acceso y uso  a través del repositorio de GitHub del'	=> 'All source code is available in our GitHub repository for free access and use',
 		'Agradecemos cualquier comentario o sugerencia al correo electrónico'	=> 'We greatly appreciate any comments or suggestions. Email us at',
 		'Resultados' => 'Results',
 		'Exportar Datos'	=> 'Download Results',
@@ -75,6 +75,7 @@ return array(
 		'Descripción'	=> 'Description',
 		'Taxon Concept ID'	=> 'Taxon Concept ID',
 		'Nombre Científico ID'	=> 'Scientific Name ID',
-		'Referencias'	=> 'References'
+		'Referencias'	=> 'References',
+		'La base de datos de esta  herramienta fue creada usando el convertidor Darwin Core to SQL desarrollador por <a href="https://github.com/Canadensys/dwca2sql">Canadensys</a>' => 'This tool database was created with the power of  the Darwin Core to SQL converter, made by <a href="https://github.com/Canadensys/dwca2sql">Canadensys</a>'
 );
 ?>

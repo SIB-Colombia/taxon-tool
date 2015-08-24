@@ -3,9 +3,10 @@
     'id'=>'taxones-grid',
     'dataProvider'=>$listTaxones,
     'ajaxUrl'=>array('taxon/busqueda'),
+    'responsiveTable' => true,
 	'columns'=>array(
     	array( 'name'=>'id', 'header'=> Yii::t('app', 'Id')),
-    	//array( 'name'=>'name', 'header'=> Yii::t('app', 'Nombre Ingresado')),
+    	array( 'name'=>'name', 'header'=> Yii::t('app', 'Nombre Ingresado')),
     	array( 'name'=>'kingdom', 'header'=> Yii::t('app', 'Reino')),
 		array( 'name'=>'phylum', 'header'=> Yii::t('app', 'Filo')),
     	array( 'name'=>'class', 'header'=> Yii::t('app', 'Clase')),

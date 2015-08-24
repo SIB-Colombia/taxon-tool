@@ -99,6 +99,7 @@ class Taxontree extends CActiveRecord{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'taxon_scientific' => array(self::HAS_MANY, 'Tax_Scientificname', 'darwin_id')
 			//'taxon_detail' => array(self::HAS_MANY, 'Taxon_Detail', 'taxon_id')
 			//'author_string' => array(self::HAS_ONE, 'Author_String', 'string')
 		);
@@ -138,7 +139,7 @@ class Taxontree extends CActiveRecord{
 	public function search()
 	{
 		if ($this->nombresTaxones != '') {
-			$nombresTaxones=str_replace("\r","<br>",$this->nombresTaxones);
+			$nombresTaxones=str_replace("\n","<br>",$this->nombresTaxones);
 			$lsid_ar = explode("<br>", $nombresTaxones);
 			$this->datosMap = array();
 			for ($i = 0; $i < count($lsid_ar); $i++) {
@@ -150,47 +151,29 @@ class Taxontree extends CActiveRecord{
 				
 				for ($i = 0; $i < count($lsid_ar); $i++) {
 					if($i == 0){
-						$condicion = "\"".trim($lsid_ar[$i])."\"";
+						$condicion = "txs.scientificName = '".trim($lsid_ar[$i])."'";
 					}else{
-						$condicion .= " \"".trim($lsid_ar[$i])."\"";
+						$condicion .= " OR txs.scientificName = '".trim($lsid_ar[$i])."'";
 					}
 				}
-				//$cond = "SELECT t.name FROM _taxon_tree t WHERE ".$condicion;
-				
-				//$criteria->with = array('taxon_detail', 'taxon_detail.author_string');
-				//$criteria->addCondition('`t`.`name` IN ('.$cond.')');
-				//$criteria->select = 'kingdom';
-				//$criteria->addCondition($condicion);
-				//$criteria->order = "scientificName ASC";
 
-				$lsids_result = Yii::app()->db->createCommand()
-					->select('*')
-					->from('tax_darwinrecord')
-					->where("match (scientificName) against ('".$condicion."' IN NATURAL LANGUAGE MODE)")
+				$lsids_result	= Yii::app()->db->createCommand()
+					->select('txs.scientificName as name,txd.*')
+					->from('taxon_db.tax_scientificname txs')
+					->join('taxon_db.tax_darwinrecord txd','txs.darwin_id = txd.taxonID')
+					->where($condicion)
 					->queryAll();
 
-				//print_r($lsids_result);	
-				//Yii::app()->end();	
-				//$lsids_result = $this->findAll($criteria);
-				
 				if(isset($lsids_result)){
-					/*$datos_ar = Array();
-					for ($i = 0; $i < count($lsids_result); $i++) {
-						$datos = $this->init_datos();
-						$author = (isset($lsids_result[$i]['taxon_detail'][0]['author_string']['string'])) ? $lsids_result[$i]['taxon_detail'][0]['author_string']['string']: ""; 
-						$datos_ar[] = $this->getLSIDS($datos, $lsids_result[$i]->name, $lsids_result[$i]->lsid, $lsids_result[$i]->rank, $lsids_result[$i]->parent_id, $author);
-					}*/
 					
-					//$datos_ar = $this->ordenarTaxon($datos_ar);
 					$dataProvider = array();
 					$this->datosExportar = $lsids_result;
 					//$keysData = array_keys($datos_ar);
 					$i=0;
 					foreach ($lsids_result as $data){
-						//for ($i = 0; $i < count($lsids_result); $i++) {
-						//$key = $keysData[$i];
+						
 						$dataProvider[$i]['id'] 				= $data['taxonID'];
-						//$dataProvider[$i]['name']				= (isset($lsid_ar[$i])) ? $lsid_ar[$i] : "-";
+						$dataProvider[$i]['name']				= (isset($data['name'])) ? $data['name'] : "-";
 						$dataProvider[$i]['kingdom']			= (isset($data['kingdom'])) ? $data['kingdom'] : "-";
 						$dataProvider[$i]['phylum']				= (isset($data['phylum'])) ? $data['phylum'] : "-";
 						$dataProvider[$i]['class']				= (isset($data['class']))? $data['class'] : "-";
